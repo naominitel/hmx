@@ -134,6 +134,18 @@ and show_sch (Forall (vars, constr, ty)) =
             (show_constr constr)
             (show_ty ty)
 
+module VMap = Map.Make(struct type t = string let compare = Pervasives.compare end)
+type env = ty_sch VMap.t
+
+let rec solve env pool constr = match constr with
+    | CBool (true) -> env
+    | CBool (false) -> failwith "false"
+    | CApp (pred, [t1 ; t2]) when pred = is_subtype ->
+        
+    |
+(*let rec solve env pool constr = match constr with*)
+
+
 let term_let v e b = App (Abs (v, b), e)
 
 let main =
@@ -145,4 +157,5 @@ let t1 = term_let "x" (Const (CInt 0)) (Var "x")
 
 let constr = infer t1 (TVar (fresh_ty_var ()))
 
-let () = Printf.printf "%s\n" @@ show_constr @@ simpl_constr constr
+let () =
+    Printf.printf "%s\n" @@ show_constr @@ simpl_constr constr
